@@ -1,0 +1,927 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../..">
+      
+      
+        <link rel="next" href="../../Machine%20Learning/different-distance-calculations/">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.14">
+    
+    
+      
+        <title>One Way ANOVA - MLCodex</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.85bb2934.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a6bdf11c.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="purple" data-md-color-accent="deep-purple">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#understanding-one-way-anova" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="MLCodex" class="md-header__button md-logo" aria-label="MLCodex" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MLCodex
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              One Way ANOVA
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="MLCodex" class="md-nav__button md-logo" aria-label="MLCodex" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    MLCodex
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Statistics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Statistics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          One Way ANOVA
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        One Way ANOVA
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-anova" class="md-nav__link">
+    What is ANOVA?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#types-of-anova" class="md-nav__link">
+    Types of ANOVA
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#f-distribution" class="md-nav__link">
+    F-Distribution
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#one-way-anova" class="md-nav__link">
+    One Way ANOVA
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#working-principle-of-one-way-anova" class="md-nav__link">
+    Working principle of One-way ANOVA
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#steps-to-calculate-one-way-anova" class="md-nav__link">
+    Steps to calculate One Way ANOVA
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hands-on-example" class="md-nav__link">
+    Hands on Example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assumptions-of-one-way-anova" class="md-nav__link">
+    Assumptions of One Way ANOVA
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practical-example-with-code" class="md-nav__link">
+    Practical example with code
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#post-hoc-test" class="md-nav__link">
+    Post-Hoc Test
+  </a>
+  
+    <nav class="md-nav" aria-label="Post-Hoc Test">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bonferroni-correction" class="md-nav__link">
+    Bonferroni correction
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tukeys-hsd-test" class="md-nav__link">
+    Tukey's HSD Test
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#disadvantages-of-one-way-anova" class="md-nav__link">
+    Disadvantages of One Way ANOVA
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#applications-of-anova" class="md-nav__link">
+    Applications of ANOVA
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-t-test-is-not-used" class="md-nav__link">
+    Why t-test is not used
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          Machine Learning
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Machine%20Learning/different-distance-calculations/" class="md-nav__link">
+        Different types of distances
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-anova" class="md-nav__link">
+    What is ANOVA?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#types-of-anova" class="md-nav__link">
+    Types of ANOVA
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#f-distribution" class="md-nav__link">
+    F-Distribution
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#one-way-anova" class="md-nav__link">
+    One Way ANOVA
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#working-principle-of-one-way-anova" class="md-nav__link">
+    Working principle of One-way ANOVA
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#steps-to-calculate-one-way-anova" class="md-nav__link">
+    Steps to calculate One Way ANOVA
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hands-on-example" class="md-nav__link">
+    Hands on Example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assumptions-of-one-way-anova" class="md-nav__link">
+    Assumptions of One Way ANOVA
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practical-example-with-code" class="md-nav__link">
+    Practical example with code
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#post-hoc-test" class="md-nav__link">
+    Post-Hoc Test
+  </a>
+  
+    <nav class="md-nav" aria-label="Post-Hoc Test">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bonferroni-correction" class="md-nav__link">
+    Bonferroni correction
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tukeys-hsd-test" class="md-nav__link">
+    Tukey's HSD Test
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#disadvantages-of-one-way-anova" class="md-nav__link">
+    Disadvantages of One Way ANOVA
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#applications-of-anova" class="md-nav__link">
+    Applications of ANOVA
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-t-test-is-not-used" class="md-nav__link">
+    Why t-test is not used
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="understanding-one-way-anova"><strong>Understanding One Way ANOVA</strong></h1>
+<p>In the realm of statistical analysis, ANOVA (Analysis of Variance) is a powerful tool that allows researchers to uncover significant differences between multiple groups or treatments. Whether you're conducting a scientific study, analyzing market research data, or simply curious about statistical methodologies, understanding ANOVA can provide valuable insights into the relationships and patterns within your data.</p>
+<h3 id="what-is-anova">What is ANOVA?</h3>
+<p>ANOVA is a statistical technique that compares the means of two or more groups to determine if there are any significant differences among them. It assesses the variability within and between the groups to draw meaningful conclusions about the factors influencing the observed differences. ANOVA is particularly useful when you want to test the null hypothesis that there are no significant differences between the groups.</p>
+<h3 id="types-of-anova">Types of ANOVA</h3>
+<p>There are various types of ANOVA, each suited for different scenarios. The most common types include <strong>one-way ANOVA</strong>, <strong>two-way ANOVA</strong>, and <strong>repeated measures ANOVA</strong>. One-way ANOVA analyzes the effects of a single factor, while two-way ANOVA examines the influence of two factors simultaneously. Repeated measures ANOVA is used when data is collected from the same subjects over multiple time points or conditions.</p>
+<pre class="mermaid"><code>graph TD
+  A[ANOVA] --&gt; B{One Way ANOVA};
+  A --&gt; C{Two Way ANOVA};
+  A --&gt; D{Repeated Measures ANOVA};</code></pre>
+<h3 id="f-distribution"><a href="https://en.wikipedia.org/wiki/F-distribution">F-Distribution</a></h3>
+<p>Before starting the ANOVA, we have to learn F-Distribution because this statistical tests are based on the F - Distribution. The F distribution is a probability distribution that arises in the context of statistical inference, particularly in analysis of variance (ANOVA) and regression analysis. It is named after the statistician Sir Ronald Fisher, who developed many fundamental concepts in statistics.</p>
+<p><img alt="F-distribution" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/F-distribution_pdf.svg/488px-F-distribution_pdf.svg.png" /></p>
+<p>This is a continuous probability distribution by using the Chi-Square Distribution <span class="arithmatex">\((χ^2)\)</span> and every Chi-Square distribution has one one parameter - degrees of freedom (<span class="arithmatex">\(df\)</span>).</p>
+<p>Lets assume, we have 2 Chi - Square Distribution <span class="arithmatex">\((χ^2_1)\)</span> &amp; <span class="arithmatex">\((χ^2_2)\)</span> and their degrees of freedoms are <span class="arithmatex">\(df_1\)</span> and <span class="arithmatex">\(df_2\)</span> respectively. Then</p>
+<div class="arithmatex">\[F-Distribution = \frac{χ^2_1/df_1}{χ^2_2/df_2}\]</div>
+<p>Because of the Chi-Square distribution takes only non-negative values, the F distribution doesn't have non-negative values. It is positively skewed and has different shapes depending on the degrees of freedom associated with it. This is commonly used to test hypothesis about the equality of two variances in different samples or populations. The F distribution is widely used in various fields of research, including psychology, education, economics and the natural and social sciences, for hypothesis testing and model comparison.</p>
+<p>The <strong>F-statistics</strong> is calculated by dividing the ratio of two sample variances or mean squares from an ANOVA table. This value is then compared to critical values from the F-distribution to determine statistical significance.</p>
+<h3 id="one-way-anova">One Way ANOVA</h3>
+<p>One-way ANOVA (Analysis of Variance) is a statistical technique that allows researchers to compare the means of three or more groups to determine if there are any significant differences among them. This powerful tool is widely used in various fields, from social sciences and psychology to business and healthcare. Understanding the basics of one-way ANOVA can help unravel hidden patterns and group distinctions within your data.</p>
+<p>One-way ANOVA is a parametric statistical test that examines the variability between multiple groups based on a single independent variable, also known as a factor. The goal is to determine if the observed differences in means across groups are statistically significant or simply due to chance. This type of ANOVA is particularly useful when you want to compare more than two groups simultaneously.</p>
+<h3 id="working-principle-of-one-way-anova">Working principle of One-way ANOVA</h3>
+<p>One-way ANOVA works by decomposing the total variability in the data into two components: the variability between groups and the variability within groups. It then calculates an F-statistic by comparing the ratio of between-group variability to within-group variability. The F-statistic follows an F distribution, which is used to assess the statistical significance of the group differences.</p>
+<h3 id="steps-to-calculate-one-way-anova">Steps to calculate One Way ANOVA</h3>
+<ol>
+<li>Define the null (<span class="arithmatex">\(H_0\)</span>) and alternative hypothesis (<span class="arithmatex">\(H_1\)</span>). The null hypothesis is that all the group means are equal. The <span class="arithmatex">\(H_1\)</span> is that at least one group is significantly different from others.</li>
+<li>Calculate the overall mean (grand mean) of all the groups combined and mean of all the groups individually.</li>
+<li>Calculate the "between-group" and "within-group" sum of squares (SS) and their respective degrees of freedom.</li>
+<li>Calculate the "between-group" and "within-group" mean squares (MS) by dividing their respective sum of the squares by their degrees of freedom.</li>
+<li>Calculate the F-Statistics by dividing the "between-group" mean square by the "within-group" mean square.</li>
+<li>By using the F-Statistics, calculate the P-Value.</li>
+<li>By comparing the P-value with your threshold (<span class="arithmatex">\(\alpha\)</span>), either accept or reject the Null Hypothesis.</li>
+</ol>
+<p>This calculation can be represented by <strong>The ANOVA Table</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">Source of variance</th>
+<th align="center">Sums of Squares</th>
+<th align="center">Degrees of freedom</th>
+<th align="center">Mean square</th>
+<th align="center">F-Statistics</th>
+<th align="center">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><strong>Between groups</strong></td>
+<td align="center"><span class="arithmatex">\(SS_{b}\)</span></td>
+<td align="center">k-1</td>
+<td align="center"><span class="arithmatex">\(MS_{b}\)</span></td>
+<td align="center"><span class="arithmatex">\(MS_b/MS_w\)</span></td>
+<td align="center">p</td>
+</tr>
+<tr>
+<td align="center"><strong>Within groups</strong></td>
+<td align="center"><span class="arithmatex">\(SS_{w}\)</span></td>
+<td align="center">N-k</td>
+<td align="center"><span class="arithmatex">\(MS_{w}\)</span></td>
+<td align="center">-</td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td align="center"><strong>Total</strong></td>
+<td align="center"><span class="arithmatex">\(SS_{t}\)</span></td>
+<td align="center">N-1</td>
+<td align="center">-</td>
+<td align="center">-</td>
+<td align="center">-</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hands-on-example">Hands on Example</h3>
+<p>Let's see we have a dataset like the below one. We have 3 groups (A, B and C) and for each group has different numerical values.</p>
+<p><center></p>
+<table>
+<thead>
+<tr>
+<th align="center">A</th>
+<th align="center">B</th>
+<th align="center">C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">3</td>
+<td align="center">1</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">8</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">9</td>
+<td align="center">10</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+<p>You can assume the "Pclass" and "Age" column from the famous titanic dataset. The "Pclass" has 3 categories e.g., class-1, class-2 and class-3 and the numericals are the "Age" column values. The "Pclass" is called <strong>factors</strong> and categories/groups are called <strong>levels</strong>. For every level can have different number of values. For each value of the levels are called <strong>individuals.</strong></p>
+<ul>
+<li><strong>Step-1:</strong> Define the <span class="arithmatex">\(H_0\)</span> hypothesis.</li>
+</ul>
+<div class="arithmatex">\[H_0 = \mu_A =\mu_B = \mu_C\]</div>
+<p>Define the <span class="arithmatex">\(H_1\)</span>. <span class="arithmatex">\(H_1 =\)</span> At-least one mean is significantly different.</p>
+<ul>
+<li><strong>Step-2:</strong> Now, for every group we have to find the mean. So,</li>
+</ul>
+<div class="arithmatex">\[\overline{X_A} = 4; \ \overline{X_B} = 6; \ \overline{X_C} = 8\]</div>
+<p>And the grand mean is</p>
+<div class="arithmatex">\[\overline{X} = \frac{\overline{X_A} + \overline{X_B} + \overline{X_C}}{3} = 6\]</div>
+<ul>
+<li><strong>Step-3:</strong> Now time to calculate the SS (Sum of Squares).</li>
+</ul>
+<div class="arithmatex">\[\large SS_{total} = \sum_{j=1}^{levels}\sum_{i=1}^{individuals}(\overline{X_{ij}} - \overline{X})^2 = 76\]</div>
+<p>and the degrees of freedom is</p>
+<div class="arithmatex">\[\large df_{total} = N - 1 = 9 - 1 = 8\]</div>
+<p>where, <span class="arithmatex">\(N\)</span> is the total individuals.</p>
+<p>Now we will calculate the <strong>Sum of Squares Between</strong>.</p>
+<p>$$ \large SS_{between} = \sum_{j=1}^{levels}(\overline{X_j} - \overline{X})^2*n_j = 24 $$.</p>
+<div class="arithmatex">\[ \large df_{between} = k - 1 = 3 - 1 = 2 \]</div>
+<p>Where <span class="arithmatex">\(k\)</span> is the number of levels.</p>
+<p>We can also calculate the <strong>Sum of Squares Within</strong>.</p>
+<div class="arithmatex">\[ \large SS_{within} =  \sum_{j=1}^{levels}\sum_{i=1}^{individuals}(X_{ij} - \overline{X_j})^2 = 52 \]</div>
+<div class="arithmatex">\[ \large df_{within} = N - k = 9 - 3 = 6 \]</div>
+<p>You can notice that</p>
+<div class="arithmatex">\[ \large SS_{total} = SS_{between} + SS_{within} \]</div>
+<div class="arithmatex">\[ \large df_{total} = df_{between} + SS_{within} \]</div>
+<ul>
+<li><strong>Step-4:</strong> Now time to calculate the Mean of Squares from the Sum of Squares.</li>
+</ul>
+<div class="arithmatex">\[ \large MS_{between} = \frac{SS_{between}}{df_{between}} = \frac{24}{2} = 12 \]</div>
+<div class="arithmatex">\[ \large MS_{within} = \frac{SS_{within}}{df_{within}} = \frac{52}{6} = 8.67 \]</div>
+<ul>
+<li><strong>Step-5:</strong> Now time to calculate the F-Statistics.</li>
+</ul>
+<div class="arithmatex">\[ \large F_{k-1, N-k} = \frac{MS_{between}}{MS_{within}} = \frac{12}{8.67} = 1.384 \]</div>
+<ul>
+<li><strong>Step-6:</strong> By using the F-Statistics value, we will calculate the P-Value. For that you can use the below python code.</li>
+</ul>
+<p><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
+
+<span class="n">f_statistic</span> <span class="o">=</span> <span class="mf">1.384</span>  <span class="c1"># The F-statistic value you&#39;ve calculated</span>
+<span class="n">df1</span> <span class="o">=</span> <span class="mi">2</span>              <span class="c1"># Degrees of freedom for the numerator (between groups)</span>
+<span class="n">df2</span> <span class="o">=</span> <span class="mi">6</span>              <span class="c1"># Degrees of freedom for the denominator (within groups)</span>
+
+<span class="n">p_value</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="n">f_statistic</span><span class="p">,</span> <span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;P-value:&quot;</span><span class="p">,</span> <span class="n">p_value</span><span class="p">)</span>
+</code></pre></div>
+And the value is calculated <strong>0.320</strong>.</p>
+<ul>
+<li><strong>Step-7:</strong> The P-value is much greater than the significant value (<span class="arithmatex">\(\alpha = 0.05\)</span>). So, we can't find enough evidence to reject the null hypothesis. That's why we can say that the groups/levels are taken from the same population.</li>
+</ul>
+<h3 id="assumptions-of-one-way-anova">Assumptions of One Way ANOVA</h3>
+<ol>
+<li>
+<p><strong>Independence:</strong> The observations within and between groups should be independent of each other. This means that the outcome of one observation should not influence the outcome of another. Independence is typically achieved through random sampling or random assignment of subjects to groups.</p>
+</li>
+<li>
+<p><strong>Normality:</strong> The data within each group should be approximately normally distributed. While one-way ANOVA is considered to be robust to moderate violations of normality, severe deviations may affect the accuracy of the test results. If normality is in doubt, non-parametric alternatives like the <strong>Shapiro-Wilk test</strong> can be considered.</p>
+</li>
+<li>
+<p><strong>Homogeneity of variances:</strong> The variances of the populations from which the samples are drawn should be equal, or at-least approximately so. This assumption is known as <em>homoscedasticity</em>. If the variances are substantially different, the accuracy of the test results may be compromised. <strong>Levene's test</strong> or <strong>Bartlett's test</strong> can be used to assess the homogeneity of variance. If this assumption is violated, alternative tests such as <strong>Welch's ANOVA</strong> can be used.</p>
+</li>
+</ol>
+<h3 id="practical-example-with-code">Practical example with code</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># import the necessary libraries</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">pingouin</span> <span class="k">as</span> <span class="nn">pg</span>  <span class="c1"># pip install pingouin</span>
+
+<span class="c1"># load the famous titanic dataset</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;titanic&#39;</span><span class="p">)</span>
+
+<span class="c1"># calculate the ANOVA table</span>
+<span class="n">anova_table</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">anova</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">dv</span><span class="o">=</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="n">between</span><span class="o">=</span><span class="s1">&#39;pclass&#39;</span><span class="p">,</span> <span class="n">detailed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">anova_table</span><span class="p">)</span>
+</code></pre></div>
+<p>The result of the above is like this:</p>
+<table>
+<thead>
+<tr>
+<th align="center">Source</th>
+<th align="center">SS</th>
+<th align="center">DF</th>
+<th align="center">MS</th>
+<th align="center">F</th>
+<th align="center">p-unc</th>
+<th align="center">np2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">pclass</td>
+<td align="center">20929.627754</td>
+<td align="center">2</td>
+<td align="center">10464.813877</td>
+<td align="center">57.443484</td>
+<td align="center">7.487984e-24</td>
+<td align="center">0.139107</td>
+</tr>
+<tr>
+<td align="center">Within</td>
+<td align="center">129527.008190</td>
+<td align="center">711</td>
+<td align="center">182.175820</td>
+<td align="center">NaN</td>
+<td align="center">NaN</td>
+<td align="center">NaN</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>p-unc</strong> is the P-value of this ANOVA test. You can see that the P-value is very less compared to the significant level (<span class="arithmatex">\(\alpha = 0.05\)</span>). So we can get enough evidence to reject the Null Hypothesis (<span class="arithmatex">\(H_0\)</span>). That's mean atleast one of the category of the <em>pclass</em> is significantly different from the others. But <strong>the ANOVA test can't tell which group(s) is/are significantly different from others.</strong> To know which group(s) is/are significantly different, we have to do <strong>Post-Hoc test</strong>. </p>
+<h3 id="post-hoc-test">Post-Hoc Test</h3>
+<p>While ANOVA determines if there are significant differences between groups, it does not reveal the specific pairings of groups that differ. Post hoc tests address this limitation by allowing researchers to make multiple pairwise comparisons. These tests provide a more detailed understanding of the group differences, enabling researchers to draw more precise conclusions. Generally, it has two types:</p>
+<ol>
+<li>Bonferroni correction</li>
+<li>Tukey's HSD (Honestly Significant Differece) Test</li>
+</ol>
+<h4 id="bonferroni-correction">Bonferroni correction</h4>
+<p>In this test, perform all the possible t-test and then compare the result. Or, you can do few number of tests and compare them. This method adjusts the significance level (<span class="arithmatex">\(\alpha\)</span>) by dividing it by the number of comparisons being made. It is a conservation The Bonferroni correction is a conservative approach that adjusts the significance level for each comparison to maintain the overall family-wise error rate. This method divides the desired alpha level by the number of pairwise comparisons. While effective in controlling Type I error, the Bonferroni correction may be overly stringent and increase the chance of Type II error.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
+
+<span class="k">for</span> <span class="n">class1</span><span class="p">,</span> <span class="n">class2</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Class </span><span class="si">{</span><span class="n">class1</span><span class="si">}</span><span class="s2"> vs Class </span><span class="si">{</span><span class="n">class2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">ttest_ind</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pclass&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">class1</span><span class="p">][</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span>
+                          <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pclass&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">class2</span><span class="p">][</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()))</span>
+    <span class="nb">print</span><span class="p">()</span>
+</code></pre></div>
+<p>And the result is like this</p>
+<div class="highlight"><pre><span></span><code>Class<span class="w"> </span><span class="m">1</span><span class="w"> </span>vs<span class="w"> </span>Class<span class="w"> </span><span class="m">2</span>
+Ttest_indResult<span class="o">(</span><span class="nv">statistic</span><span class="o">=</span><span class="m">5</span>.485187676773201,<span class="w"> </span><span class="nv">pvalue</span><span class="o">=</span><span class="m">7</span>.835568991415144e-08<span class="o">)</span>
+
+Class<span class="w"> </span><span class="m">2</span><span class="w"> </span>vs<span class="w"> </span>Class<span class="w"> </span><span class="m">3</span>
+Ttest_indResult<span class="o">(</span><span class="nv">statistic</span><span class="o">=</span><span class="m">3</span>.927800191020872,<span class="w"> </span><span class="nv">pvalue</span><span class="o">=</span><span class="m">9</span>.715078600777852e-05<span class="o">)</span>
+
+Class<span class="w"> </span><span class="m">3</span><span class="w"> </span>vs<span class="w"> </span>Class<span class="w"> </span><span class="m">1</span>
+Ttest_indResult<span class="o">(</span><span class="nv">statistic</span><span class="o">=</span>-10.849122601201033,<span class="w"> </span><span class="nv">pvalue</span><span class="o">=</span><span class="m">6</span>.134470007830625e-25<span class="o">)</span>
+</code></pre></div>
+<p>If we see the result, then the Class 1 vs Class 2 test and Class 3 vs Clas 1 test results are extremly significant. So, the Class 1 of "pclass" is significantly different from the others. But if we take significant level <span class="arithmatex">\(\alpha = \frac{0.05}{3} = 0.0167\)</span> then all the groups are significantly different from each other.</p>
+<h4 id="tukeys-hsd-test">Tukey's HSD Test</h4>
+<p>Tukey's HSD test is widely used and provides simultaneous confidence intervals for all possible pairwise comparisons. It controls the family-wise error rate, making it a popular choice. Tukey's HSD test is suitable for equal and unequal sample sizes.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># import the required libraries</span>
+<span class="kn">from</span> <span class="nn">statsmodels.stats.multicomp</span> <span class="kn">import</span> <span class="n">pairwise_tukeyhsd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># select our columns and drop the NaN values</span>
+<span class="n">required_df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;pclass&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">tukey</span> <span class="o">=</span> <span class="n">pairwise_tukeyhsd</span><span class="p">(</span><span class="n">endog</span><span class="o">=</span><span class="n">required_df</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">],</span> <span class="n">groups</span><span class="o">=</span><span class="n">required_df</span><span class="p">[</span><span class="s1">&#39;pclass&#39;</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+
+<span class="n">tukey</span><span class="o">.</span><span class="n">plot_simultaneous</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<p>The result of the above code is</p>
+<p><img alt="Tukey's Result" src="../../assets/Statistics/tukey.png" /></p>
+<p>You can also see the summary of this test by running the below code.</p>
+<div class="highlight"><pre><span></span><code><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">tukey</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+</code></pre></div>
+<p>The result is</p>
+<p><img alt="Tukey's Test as Summary" src="../../assets/Statistics/tukey-2.png" /></p>
+<h3 id="disadvantages-of-one-way-anova">Disadvantages of One Way ANOVA</h3>
+<p>While one-way ANOVA is a useful statistical technique, it also has certain drawbacks that researchers should be aware of. Here are some common drawbacks of one-way ANOVA:</p>
+<p><strong>Assumption of Homogeneity of Variances:</strong> One-way ANOVA assumes that the variances across all groups are equal. Violation of this assumption, known as heteroscedasticity, can affect the accuracy and validity of the results. It may lead to inflated or deflated Type I error rates, making it challenging to draw accurate conclusions.</p>
+<p><strong>Sensitivity to Outliers:</strong> One-way ANOVA can be sensitive to outliers, particularly when the sample sizes are small. Outliers can significantly impact the mean and variance, potentially influencing the results and leading to incorrect interpretations.</p>
+<p><strong>Assumption of Normality:</strong> One-way ANOVA assumes that the data within each group follows a normal distribution. If the assumption is violated, it can affect the validity of the results. However, one-way ANOVA is often robust to violations of normality, especially when the sample sizes are large.</p>
+<p><strong>Limited to One Independent Variable:</strong> As the name suggests, one-way ANOVA is designed to analyze the effects of a single independent variable or factor on a dependent variable. It is not suitable for investigating the influence of multiple independent variables or complex relationships between variables. In such cases, other statistical techniques like factorial ANOVA or regression analysis may be more appropriate.</p>
+<p><strong>Post-hoc Interpretation:</strong> While one-way ANOVA can identify significant group differences, it does not provide specific information about which groups differ from each other. Post-hoc tests are often necessary to make pairwise comparisons, but these tests increase the chances of Type I errors. Multiple post-hoc tests also require careful consideration of family-wise error rate control methods.</p>
+<p><strong>Lack of Causal Inference:</strong> One-way ANOVA examines associations and differences between groups, but it does not establish causality. It only provides evidence for the existence of group differences, not the underlying causes or mechanisms responsible for those differences. Causal relationships may require additional experimental designs or more sophisticated statistical analyses.</p>
+<p><strong>Sample Size Considerations:</strong> One-way ANOVA performs better with larger sample sizes. Small sample sizes can limit the statistical power of the analysis, making it difficult to detect significant group differences accurately. It is crucial to ensure an adequate sample size to increase the reliability and generalizability of the findings.</p>
+<h3 id="applications-of-anova">Applications of ANOVA</h3>
+<p><strong>Hyperparameter tuning:</strong> When selecting the best hyperparameters for a machine learning model, one-way ANOVA can be used to compare the performance of models with different hyperparameter settings. By treating each hyperparameter settings as a group, you can perform one-way ANOVA to determine if there are any significant differences in performance across the various settings.</p>
+<p><strong>Feature selection:</strong> One-way ANOVA can be used as a univariate feature selection method to idenity features that are significantly associated with the target variable, especially when the target variable is categorical with more than two levels. In this context, the one-way ANOVA is performed for each feature, and features with low p-values are considered to be more relevant for prediction.</p>
+<p><strong>Algorithm comparison:</strong> When comparing the performance of different machine learning algorithms, one-way ANOVA can be used to determine if there are any significant differences in their performance metrics (e.g., accuracy, F1 score, etc.) across multiple runs or cross-validation folds. This can help you decide which algorithm is the most suitable for a specific problem.</p>
+<p><strong>Model stability assessment:</strong> One-way ANOVA can be used to assess the stability of a machine learning model by comparing its performance across different random seeds or initializations. If the model's performance varies significantly between different initializations, it may indicate that the model is unstable or highly sensitive to the choice of initial conditions.</p>
+<h3 id="why-t-test-is-not-used">Why t-test is not used</h3>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy"], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.b4d07000.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
