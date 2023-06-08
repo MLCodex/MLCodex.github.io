@@ -1,0 +1,1288 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../One-Way-ANOVA/">
+      
+      
+        <link rel="next" href="../../Machine%20Learning/different-distance-calculations/">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.14">
+    
+    
+      
+        <title>Basic guide of Matrix Algebra - MLCodex</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.85bb2934.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a6bdf11c.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#inside-the-matrix-the-art-and-science-of-mathematical-marvels" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="MLCodex" class="md-header__button md-logo" aria-label="MLCodex" data-md-component="logo">
+      
+  <img src="../../assets/logo/logo-6.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MLCodex
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Basic guide of Matrix Algebra
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="MLCodex" class="md-nav__button md-logo" aria-label="MLCodex" data-md-component="logo">
+      
+  <img src="../../assets/logo/logo-6.png" alt="logo">
+
+    </a>
+    MLCodex
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Statistics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Statistics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../One-Way-ANOVA/" class="md-nav__link">
+        One Way ANOVA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Basic guide of Matrix Algebra
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Basic guide of Matrix Algebra
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-matrix" class="md-nav__link">
+    What is Matrix?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#different-types-of-matrices" class="md-nav__link">
+    Different types of Matrices
+  </a>
+  
+    <nav class="md-nav" aria-label="Different types of Matrices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lower-upper-triangular-matrix" class="md-nav__link">
+    Lower &amp; Upper Triangular Matrix
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagonal-matrix" class="md-nav__link">
+    Diagonal Matrix
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#orthogonal-matrix" class="md-nav__link">
+    Orthogonal Matrix
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#symmetric-matrix" class="md-nav__link">
+    Symmetric Matrix
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#determinate" class="md-nav__link">
+    Determinate
+  </a>
+  
+    <nav class="md-nav" aria-label="Determinate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inverse-matrix" class="md-nav__link">
+    Inverse Matrix
+  </a>
+  
+    <nav class="md-nav" aria-label="Inverse Matrix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-to-find-the-inverse-of-a-matrix" class="md-nav__link">
+    How to find the inverse of a matrix?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-is-the-inverse-of-a-matrix-important" class="md-nav__link">
+    Why is the inverse of a matrix important?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#eigen-vectors-eigen-values-in-terms-of-linear-transformation" class="md-nav__link">
+    Eigen Vectors &amp; Eigen Values in terms of Linear Transformation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linear-transformation" class="md-nav__link">
+    Linear Transformation
+  </a>
+  
+    <nav class="md-nav" aria-label="Linear Transformation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-the-meaning-of-rn-in-coordinate-system" class="md-nav__link">
+    What is the meaning of \(R^n\) in coordinate system?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-standard-basis-vectors" class="md-nav__link">
+    What is standard basis vectors?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-domain-and-codomain" class="md-nav__link">
+    What is domain and codomain?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-linear-transformation" class="md-nav__link">
+    What is Linear Transformation?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-visualize-the-linear-transformation" class="md-nav__link">
+    How to visualize the Linear Transformation?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#some-examples-of-linear-transformations" class="md-nav__link">
+    Some examples of linear transformations
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#eigen-vectors-eigen-values-in-linear-transformation" class="md-nav__link">
+    Eigen Vectors &amp; Eigen Values in Linear Transformation
+  </a>
+  
+    <nav class="md-nav" aria-label="Eigen Vectors &amp; Eigen Values in Linear Transformation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-to-find-eigen-vectors-and-eigen-values" class="md-nav__link">
+    How to find Eigen Vectors and Eigen Values?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hands-on-calculation-to-find-eigen-vectors-and-eigen-values" class="md-nav__link">
+    Hands on calculation to find Eigen Vectors and Eigen Values
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties-of-eigen-vectors-and-eigen-values" class="md-nav__link">
+    Properties of Eigen Vectors and Eigen Values
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          Machine Learning
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Machine%20Learning/different-distance-calculations/" class="md-nav__link">
+        Different types of distances
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-matrix" class="md-nav__link">
+    What is Matrix?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#different-types-of-matrices" class="md-nav__link">
+    Different types of Matrices
+  </a>
+  
+    <nav class="md-nav" aria-label="Different types of Matrices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lower-upper-triangular-matrix" class="md-nav__link">
+    Lower &amp; Upper Triangular Matrix
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagonal-matrix" class="md-nav__link">
+    Diagonal Matrix
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#orthogonal-matrix" class="md-nav__link">
+    Orthogonal Matrix
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#symmetric-matrix" class="md-nav__link">
+    Symmetric Matrix
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#determinate" class="md-nav__link">
+    Determinate
+  </a>
+  
+    <nav class="md-nav" aria-label="Determinate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inverse-matrix" class="md-nav__link">
+    Inverse Matrix
+  </a>
+  
+    <nav class="md-nav" aria-label="Inverse Matrix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-to-find-the-inverse-of-a-matrix" class="md-nav__link">
+    How to find the inverse of a matrix?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-is-the-inverse-of-a-matrix-important" class="md-nav__link">
+    Why is the inverse of a matrix important?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#eigen-vectors-eigen-values-in-terms-of-linear-transformation" class="md-nav__link">
+    Eigen Vectors &amp; Eigen Values in terms of Linear Transformation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linear-transformation" class="md-nav__link">
+    Linear Transformation
+  </a>
+  
+    <nav class="md-nav" aria-label="Linear Transformation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-the-meaning-of-rn-in-coordinate-system" class="md-nav__link">
+    What is the meaning of \(R^n\) in coordinate system?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-standard-basis-vectors" class="md-nav__link">
+    What is standard basis vectors?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-domain-and-codomain" class="md-nav__link">
+    What is domain and codomain?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-linear-transformation" class="md-nav__link">
+    What is Linear Transformation?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-visualize-the-linear-transformation" class="md-nav__link">
+    How to visualize the Linear Transformation?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#some-examples-of-linear-transformations" class="md-nav__link">
+    Some examples of linear transformations
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#eigen-vectors-eigen-values-in-linear-transformation" class="md-nav__link">
+    Eigen Vectors &amp; Eigen Values in Linear Transformation
+  </a>
+  
+    <nav class="md-nav" aria-label="Eigen Vectors &amp; Eigen Values in Linear Transformation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-to-find-eigen-vectors-and-eigen-values" class="md-nav__link">
+    How to find Eigen Vectors and Eigen Values?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hands-on-calculation-to-find-eigen-vectors-and-eigen-values" class="md-nav__link">
+    Hands on calculation to find Eigen Vectors and Eigen Values
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties-of-eigen-vectors-and-eigen-values" class="md-nav__link">
+    Properties of Eigen Vectors and Eigen Values
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<p><center></p>
+<h1 id="inside-the-matrix-the-art-and-science-of-mathematical-marvels">Inside the Matrix: The Art and Science of Mathematical Marvels</h1>
+<p></center></p>
+<h2 id="what-is-matrix">What is Matrix?</h2>
+<p>Matrices, the plural form of a matrix, are the arrangements of numbers, variables, symbols, or expressions in a rectangular table that contains various numbers of rows and columns. They are rectangular-shaped arrays, for which different operations like addition, multiplication, and transposition are defined. The numbers or entries in the matrix are known as its elements. Horizontal entries of matrices are called rows and vertical entries are known as columns.</p>
+<h2 id="different-types-of-matrices">Different types of Matrices</h2>
+<p>Before going to the mathematical operations with matrices, let's first see some types of it.</p>
+<h3 id="lower-upper-triangular-matrix">Lower &amp; Upper Triangular Matrix</h3>
+<p>A lower triangular matrix is a square matrix whose all elements above the principal diagonal are zeros. A upper triangular matrix is a square matrix whose all elements below the principal diagonal are zeros. For example, the matrix</p>
+<div class="arithmatex">\[ \begin{bmatrix}
+2 &amp; -1 &amp; 3\\
+0 &amp; 5 &amp; 2\\
+0 &amp; 0 &amp; -2
+\end{bmatrix} \]</div>
+<p>is an upper triangular matrix, and the matrix</p>
+<div class="arithmatex">\[ \begin{bmatrix}
+2 &amp; 0 &amp; 0\\
+1 &amp; 5 &amp; 0\\
+1 &amp; -1 &amp; -2
+\end{bmatrix} \]</div>
+<p>is a lower triangular matrix.</p>
+<h3 id="diagonal-matrix">Diagonal Matrix</h3>
+<p>A diagonal matrix is a matrix that is both upper triangular and lower triangular. i.e., all the elements above and below the principal diagonal are zeros and hence the name "diagonal matrix". Its mathematical definition is, a matrix A = [<span class="arithmatex">\(a_{ij}\)</span>] is said to be diagonal if</p>
+<ul>
+<li>A is a square matrix</li>
+<li><span class="arithmatex">\(a_{ij} = 0\)</span> when <span class="arithmatex">\(i \neq j\)</span></li>
+</ul>
+<div class="arithmatex">\[ \begin{bmatrix}
+4 &amp; 0 &amp; 0 &amp; 0\\
+0 &amp; -2 &amp; 0 &amp; 0\\
+0 &amp; 0 &amp; 1 &amp; 0\\
+0 &amp; 0 &amp; 0 &amp; 7
+\end{bmatrix} \]</div>
+<p>Note to remember is that the diagonal elements of a diagonal matrix can be either zeros or non-zeros.</p>
+<ul>
+<li><strong>Power:</strong> The nth power of a diagonal matrix (where n is a non-negative integer) can be obtained by raising each diagonal element to the power of n.</li>
+<li><strong>Eigen values:</strong> The eigen values of a diagonal matrix are just the values on the diagonal. The corresponding eigen vectors are the standard basis vectors.\</li>
+<li><strong>Multiplication by a Vector:</strong> When a diagonal matrix multiplies a vector, it scales each component of the vector by the corresponding element on the diagonal.</li>
+<li><strong>Matrix Multiplication:</strong> The product of two diagonal matrices is just the diagonal matrix with the corresponding elements on the diagonals multiplied.</li>
+</ul>
+<p>You can read more about the diagonal matrix <a href="https://www.cuemath.com/algebra/diagonal-matrix">here</a>.</p>
+<h3 id="orthogonal-matrix">Orthogonal Matrix</h3>
+<p>Let's say you have a matrix <span class="arithmatex">\(A\)</span>. You have calculated it's inverse (<span class="arithmatex">\(A^{-1}\)</span>) and transpose (<span class="arithmatex">\(A^T\)</span>) and if the formula <span class="arithmatex">\(A^T = A^{-1}\)</span> satisfies, then the matrix <span class="arithmatex">\(A\)</span> is called Orthogonal Matrix. So, you can rearrange the formula like this</p>
+<p><span class="arithmatex">\(A^T = A^{-1}\)</span></p>
+<p><span class="arithmatex">\(=&gt; AA^T = AA^{-1} \ (Multiply \ A \  to \ the \ both \ sides)\)</span></p>
+<p><span class="arithmatex">\(=&gt; AA^T = I \ (Where \ AA^{-1} \ is \ an \ identical \ matrix)\)</span></p>
+<p><span class="arithmatex">\(=&gt; A^TA = I \ (In \ a \ similar \ way)\)</span></p>
+<p><span class="arithmatex">\(=&gt; AA^T = A^TA = I\)</span></p>
+<ul>
+<li>An orthogonal matrix is a square matrix whose columns and rows are orthogonal unit vectors (i.e., orthogonal vectors), meaning that they are all of unit length and are at right angles to each other.</li>
+<li><strong>Inverse Equals Transpose:</strong> The transpose of an orthogonal matrix equals its inverse, e.e., <span class="arithmatex">\(A^T = A^{-1}\)</span>. This property makes calculations with orthogonal matrices computationally efficient.</li>
+</ul>
+<p>To know more, click <a href="https://www.cuemath.com/algebra/orthogonal-matrix/">here</a> and for <a href="https://www.cuemath.com/algebra/identity-matrix">Identical Matrix</a>.</p>
+<h3 id="symmetric-matrix">Symmetric Matrix</h3>
+<p>A symmetric matrix is those matrix which satisfy the formula</p>
+<div class="arithmatex">\[ A = A^T \]</div>
+<p>where <span class="arithmatex">\(A\)</span> is a <span class="arithmatex">\((n \times n)\)</span> matrix.</p>
+<ul>
+<li><strong>Real Eigen Values:</strong> The eigen values of a real symmetric matrix are always real, not complex.</li>
+<li><strong>Orthogonal Eigen Vectors:</strong> For a real symmetric matrix, the eigen vectors corresponding to different eigen values are always orthogonal to each other. If the eigen values are distinct, you can even choose an orthonormal basis of eigen vectors.</li>
+</ul>
+<h2 id="determinate">Determinate</h2>
+<p><center>
+<img alt="Determinate" src="https://www.bing.com/th?id=OSK.HEROxlOVKb4i5D7PLM7-m_YMVN4Z8asiqwYKs7OZ1d_TZ9E&amp;pid=cdx&amp;w=320&amp;h=189" />
+</center></p>
+<p>The determinant of a matrix is a scalar value that is a function of the entries of a square matrix. It characterizes some properties of the matrix and the linear map represented by the matrix. In particular, the determinant is nonzero if and only if the matrix is invertible and the linear map represented by the matrix is an isomorphism.</p>
+<p>The determinant of a matrix <span class="arithmatex">\(A\)</span> is represented by two vertical lines or simply by writing det and writing the matrix name. For example, <span class="arithmatex">\(|A|\)</span>, <span class="arithmatex">\(det(A)\)</span>, <span class="arithmatex">\(det \ A\)</span>, or <span class="arithmatex">\(Δ\)</span>.</p>
+<p><strong>Calculate a 2X2 matrix determinate</strong></p>
+<p>If we have a matrix</p>
+<p><span class="arithmatex">\(A = \begin{bmatrix}
+a &amp; b\\
+c &amp; d\\
+\end{bmatrix} \ then \ |A| = (a \times d) - (b \times c)\)</span></p>
+<p><strong>Calculate a 3X3 matrix determinate</strong></p>
+<p><span class="arithmatex">\(A = \begin{bmatrix}
+a_1 &amp; b_1 &amp; c_1\\
+a_2 &amp; b_2 &amp; c_2\\
+a_3 &amp; b_3 &amp; c_3\\
+\end{bmatrix} \ then \ |A| = 
+a_1.\begin{vmatrix}
+b_2 &amp; c_2\\
+b_3 &amp; c_3
+\end{vmatrix} - 
+b_1.\begin{vmatrix}
+a_2 &amp; c_2\\
+a_3 &amp; c_3
+\end{vmatrix} + 
+c_1.\begin{vmatrix}
+a_2 &amp; b_2\\
+a_3 &amp; b_3
+\end{vmatrix}\)</span></p>
+<p><strong>Calculate a 4X4 matrix determinate</strong></p>
+<p><span class="arithmatex">\(A = \begin{bmatrix}
+a_1 &amp; b_1 &amp; c_2 &amp; d_1\\
+a_2 &amp; b_2 &amp; c_2 &amp; d_2\\
+a_3 &amp; b_3 &amp; c_3 &amp; d_3\\
+a_4 &amp; b_4 &amp; c_4 &amp; d_4
+\end{bmatrix}\)</span></p>
+<p><span class="arithmatex">\(|A| = 
+a_1.\begin{vmatrix}
+b_2 &amp; c_2 &amp; d_2\\
+b_3 &amp; c_3 &amp; d_3\\
+b_4 &amp; c_4 &amp; d_4
+\end{vmatrix} - 
+b_1.\begin{vmatrix}
+a_2 &amp; c_2 &amp; d_2\\
+a_3 &amp; c_3 &amp; d_3\\
+a_4 &amp; c_4 &amp; d_4
+\end{vmatrix} +
+c_1.\begin{vmatrix}
+a_2 &amp; b_2 &amp; d_2\\
+a_3 &amp; b_3 &amp; d_3\\
+a_4 &amp; b_4 &amp; d_4
+\end{vmatrix} -
+d_1.\begin{vmatrix}
+a_2 &amp; b_2 &amp; c_2\\
+a_3 &amp; b_3 &amp; c_3\\
+a_4 &amp; b_4 &amp; c_4
+\end{vmatrix}\)</span></p>
+<p><strong>See the sign of the every even term while calculating the determinate. That'a an important term to remember.</strong></p>
+<h3 id="properties">Properties</h3>
+<ul>
+<li>The determinate of any 1X1 matrix is always equal to the element of the matrix.</li>
+<li>The determinate of a matrix is equal to the determinate of its transpose.</li>
+<li>If any two rows (or columns) of a determinant are interchanged, then the sign of the determinant changes.</li>
+<li>If any two rows (or columns) of a determinant are identical, then the determinant is 0.</li>
+<li>If all elements of a row (or column) of a matrix of a determinant are zeros, then the value of the determinant is 0.</li>
+<li>If each element of a row (or column) of a determinant is multiplied by a scalar k, then the value of the resultant determinant is k times the value of the original determinant.</li>
+<li>If each element of a row (or column) of a determinant is expressed as sum of two (or more) numbers, then the determinant can be split into the sum of two (or more) determinants.</li>
+<li>If each element of a row (or column) is multiplied by a constant and the elements are added to the corresponding elements of another row (or column), then the determinant remains unchanged.</li>
+<li>The determinant of an identity matrix is always 1.</li>
+<li>The determinant of a diagonal matrix is always the product of elements of its principal diagonal.</li>
+<li>The determinant of an orthogonal matrix is either +1 or -1.</li>
+</ul>
+<h2 id="inverse-matrix">Inverse Matrix</h2>
+<p>The inverse of a matrix is a matrix that, when multiplied by the original matrix, gives the <a href="https://www.cuemath.com/algebra/identity-matrix">identity matrix</a>. The inverse of a matrix <span class="arithmatex">\(A\)</span> is denoted by <span class="arithmatex">\(A^{-1}\)</span>, and it satisfies the property</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>A</mi><msup><mi>A</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo>=</mo><msup><mi>A</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mi>A</mi><mo>=</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">AA^{-1} = A^{-1}A = I
+</annotation></semantics></math>
+
+<p>Not every matrix has an inverse. Only <strong>square matrices</strong> can have an inverse, and only if their <strong>determinant</strong> is not zero. The determinant is a scalar value that can be calculated from a square matrix and has some properties related to the linear transformation represented by the matrix. A matrix that has an inverse is called <strong>invertible</strong> or <strong>nonsingular</strong>, and a matrix that does not have an inverse is called <strong>noninvertible</strong> or <strong>singular</strong>.</p>
+<h3 id="how-to-find-the-inverse-of-a-matrix">How to find the inverse of a matrix?</h3>
+<p>There are different methods to find the inverse of a matrix, depending on the size and complexity of the matrix. Some of the common methods are:</p>
+<ul>
+<li>For a 2 x 2 matrix, the inverse can be found using a simple formula:</li>
+</ul>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>a</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>b</mi></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>c</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>d</mi></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo>=</mo><mfrac><mn>1</mn><mrow><mi>a</mi><mi>d</mi><mo>−</mo><mi>b</mi><mi>c</mi></mrow></mfrac><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>d</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mi>b</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mi>c</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>a</mi></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\begin{bmatrix}
+a &amp; b \\
+c &amp; d
+\end{bmatrix}^{-1}
+=
+\frac{1}{ad-bc}
+\begin{bmatrix}
+d &amp; -b \\
+-c &amp; a
+\end{bmatrix}
+</annotation></semantics></math>
+
+<p>where <span class="arithmatex">\(ad-bc\)</span> is the determinant of the matrix.</p>
+<ul>
+<li>For a larger matrix (n x n), the inverse can be found using the adjoint method. This method involves finding the minors and cofactors of the elements of the matrix, and then using them to form the adjugate or adjoint matrix. The adjugate matrix is the transpose of the cofactor matrix. The cofactor matrix is obtained by multiplying each minor by (-1)^(i+j), where i and j are the row and column indices of the element. The minor of an element is the determinant of the submatrix obtained by deleting its row and column. The formula for the inverse using this method is:</li>
+</ul>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>A</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo>=</mo><mfrac><mn>1</mn><mrow><mi mathvariant="normal">∣</mi><mi>A</mi><mi mathvariant="normal">∣</mi></mrow></mfrac><mtext>adj</mtext><mo stretchy="false">(</mo><mi>A</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">A^{-1} = \frac{1}{|A|}\text{adj}(A)
+</annotation></semantics></math>
+
+<p>where <span class="arithmatex">\(|A|\)</span> is the determinant of <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(adj(A)\)</span> is the adjugate of A. For example, if</p>
+<div class="arithmatex">\[ A = \begin{bmatrix}
+1 &amp; 2 &amp; 3\\
+0 &amp; -4 &amp; 1\\
+2 &amp; 0 &amp; -3
+\end{bmatrix} \ then \ |A| = 48 \]</div>
+<p>The minors of A are:</p>
+<div class="arithmatex">\[M_{11} = \begin{bmatrix}
+-4 &amp; 1\\
+0 &amp; -3
+\end{bmatrix} = 12\]</div>
+<div class="arithmatex">\[M_{12} = \begin{bmatrix}
+0 &amp; 1\\
+2 &amp; -3
+\end{bmatrix} = -2\]</div>
+<div class="arithmatex">\[M_{13} = \begin{bmatrix}
+0 &amp; -4\\
+2 &amp; 0
+\end{bmatrix} = 8\]</div>
+<div class="arithmatex">\[M_{21} = \begin{bmatrix}
+2 &amp; 3\\
+0 &amp; -3
+\end{bmatrix} = -6\]</div>
+<div class="arithmatex">\[M_{22} = \begin{bmatrix}
+1 &amp; 3\\
+2 &amp; -3
+\end{bmatrix} = -9\]</div>
+<div class="arithmatex">\[M_{23} = \begin{bmatrix}
+1 &amp; 2\\
+2 &amp; 0
+\end{bmatrix} = -4\]</div>
+<div class="arithmatex">\[M_{31} ​= \begin{bmatrix}
+​2 &amp; 3\\
+​-4 &amp; 1
+\end{bmatrix} = 14\]</div>
+<div class="arithmatex">\[M_{32} ​= \begin{bmatrix}
+​1 &amp; 3\\
+​0 &amp; 1
+\end{bmatrix} ​​= 1\]</div>
+<div class="arithmatex">\[M_{33}​ = \begin{bmatrix}
+​1 &amp; 2\\
+​0 &amp; −4
+\end{bmatrix} ​​= −4\]</div>
+<p>The cofactors of A are:</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>C</mi><mn>11</mn></msub><mo>=</mo><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><msup><mo stretchy="false">)</mo><mrow><mn>1</mn><mo>+</mo><mn>1</mn></mrow></msup><msub><mi>M</mi><mn>11</mn></msub><mo>=</mo><mn>12</mn></mrow><annotation encoding="application/x-tex">C_{11} = (-1)^{1+1}M_{11} = 12
+</annotation></semantics></math>
+
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>C</mi><mn>12</mn></msub><mo>=</mo><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><msup><mo stretchy="false">)</mo><mrow><mn>1</mn><mo>+</mo><mn>2</mn></mrow></msup><msub><mi>M</mi><mn>12</mn></msub><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">C_{12} = (-1)^{1+2}M_{12} = 2
+</annotation></semantics></math>
+
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>C</mi><mn>13</mn></msub><mo>=</mo><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><msup><mo stretchy="false">)</mo><mrow><mn>1</mn><mo>+</mo><mn>3</mn></mrow></msup><msub><mi>M</mi><mn>13</mn></msub><mo>=</mo><mn>8</mn></mrow><annotation encoding="application/x-tex">C_{13} = (-1)^{1+3}M_{13} = 8
+</annotation></semantics></math>
+
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>C</mi><mn>21</mn></msub><mo>=</mo><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><msup><mo stretchy="false">)</mo><mrow><mn>2</mn><mo>+</mo><mn>1</mn></mrow></msup><msub><mi>M</mi><mn>21</mn></msub><mo>=</mo><mn>6</mn></mrow><annotation encoding="application/x-tex">C_{21} = (-1)^{2+1}M_{21} = 6
+</annotation></semantics></math>
+
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>C</mi><mn>22</mn></msub><mo>=</mo><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><msup><mo stretchy="false">)</mo><mrow><mn>2</mn><mo>+</mo><mn>2</mn></mrow></msup><msub><mi>M</mi><mn>22</mn></msub><mo>=</mo><mo>−</mo><mn>9</mn></mrow><annotation encoding="application/x-tex">C_{22} = (-1)^{2+2}M_{22} = -9
+</annotation></semantics></math>
+
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>C</mi><mn>23</mn></msub><mo>=</mo><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><msup><mo stretchy="false">)</mo><mrow><mn>2</mn><mo>+</mo><mn>3</mn></mrow></msup><msub><mi>M</mi><mn>23</mn></msub><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">C_{23} = (-1)^{2+3}M_{23} = 4
+</annotation></semantics></math>
+
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>C</mi><mn>31</mn></msub><mo>=</mo><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><msup><mo stretchy="false">)</mo><mrow><mn>3</mn><mo>+</mo><mn>1</mn></mrow></msup><msub><mi>M</mi><mn>31</mn></msub><mo>=</mo><mn>14</mn></mrow><annotation encoding="application/x-tex">C_{31} = (-1)^{3+1}M_{31} = 14
+</annotation></semantics></math>
+
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>C</mi><mn>32</mn></msub><mo>=</mo><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><msup><mo stretchy="false">)</mo><mrow><mn>3</mn><mo>+</mo><mn>2</mn></mrow></msup><msub><mi>M</mi><mn>32</mn></msub><mo>=</mo><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">C_{32} = (-1)^{3+2}M_{32} = -1
+</annotation></semantics></math>
+
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>C</mi><mn>33</mn></msub><mo>=</mo><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><msup><mo stretchy="false">)</mo><mrow><mn>3</mn><mo>+</mo><mn>3</mn></mrow></msup><msub><mi>M</mi><mn>33</mn></msub><mo>=</mo><mo>−</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">C_{33} = (-1)^{3+3}M_{33} = -4
+</annotation></semantics></math>
+
+<p>The adjugate of A is:</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>adj</mtext><mo stretchy="false">(</mo><mi>A</mi><mo stretchy="false">)</mo><mo>=</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>C</mi><mn>11</mn></msub></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>C</mi><mn>21</mn></msub></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>C</mi><mn>31</mn></msub></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>C</mi><mn>12</mn></msub></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>C</mi><mn>22</mn></msub></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>C</mi><mn>32</mn></msub></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>C</mi><mn>13</mn></msub></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>C</mi><mn>23</mn></msub></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><msub><mi>C</mi><mn>33</mn></msub></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mo>=</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>12</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>6</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>14</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>2</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>9</mn></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>1</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>8</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>4</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>4</mn></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\text{adj}(A) =
+\begin{bmatrix}
+C_{11} &amp; C_{21} &amp; C_{31}\\
+C_{12} &amp; C_{22} &amp; C_{32}\\
+C_{13} &amp; C_{23} &amp; C_{33}\\
+\end{bmatrix}
+=
+\begin{bmatrix}
+12 &amp; 6 &amp; 14\\
+2 &amp; -9 &amp; -1\\
+8 &amp; 4 &amp; -4\\
+\end{bmatrix}
+</annotation></semantics></math>
+
+<p>The inverse of A is:</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>A</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo>=</mo><mfrac><mn>1</mn><mrow><mi mathvariant="normal">∣</mi><mi>A</mi><mi mathvariant="normal">∣</mi></mrow></mfrac><mtext>adj</mtext><mo stretchy="false">(</mo><mi>A</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>1</mn><mn>48</mn></mfrac><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>12</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>6</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>14</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>2</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>9</mn></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>1</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>8</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>4</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>4</mn></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mo>=</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0.25</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0.125</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0.292</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0.042</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>0.188</mn></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>0.021</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0.167</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0.083</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>0.083</mn></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">A^{-1} =
+\frac{1}{|A|}\text{adj}(A)
+=
+\frac{1}{48}
+\begin{bmatrix}
+12 &amp; 6 &amp; 14\\
+2 &amp; -9 &amp; -1\\
+8 &amp; 4 &amp; -4\\
+\end{bmatrix}
+=
+\begin{bmatrix}
+0.25 &amp; 0.125 &amp; 0.292\\
+0.042 &amp; -0.188 &amp; -0.021\\
+0.167 &amp; 0.083 &amp; -0.083\\
+\end{bmatrix}
+</annotation></semantics></math>
+
+<ul>
+<li>For a large or complex matrix, the inverse can be found using a numerical method such as Gaussian elimination or Newton’s method. These methods involve performing a series of operations on the matrix until it is reduced to a simpler form, such as the identity matrix or a diagonal matrix. Then, the inverse can be obtained by applying the same operations to the identity matrix or solving a system of equations. These methods are usually implemented by computers or calculators.</li>
+</ul>
+<h3 id="why-is-the-inverse-of-a-matrix-important">Why is the inverse of a matrix important?</h3>
+<p>The inverse of a matrix has many applications in mathematics and other fields. Some of them are:</p>
+<ul>
+<li>The inverse of a matrix can be used to <strong>solve systems of linear equations</strong>. For example, if <span class="arithmatex">\(AX = B\)</span> is a system of n linear equations in n unknowns, where <span class="arithmatex">\(A\)</span> is an invertible n x n matrix and X and B are n x 1 column vectors, then X can be found by multiplying both sides by <span class="arithmatex">\(A^{-1}\)</span></li>
+</ul>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>A</mi><mi>X</mi><mo>=</mo><mi>B</mi><mtext>  </mtext><mo>⟹</mo><mtext>  </mtext><msup><mi>A</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo stretchy="false">(</mo><mi>A</mi><mi>X</mi><mo stretchy="false">)</mo><mo>=</mo><msup><mi>A</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo stretchy="false">(</mo><mi>B</mi><mo stretchy="false">)</mo><mtext>  </mtext><mo>⟹</mo><mtext>  </mtext><mo stretchy="false">(</mo><msup><mi>A</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mi>A</mi><mo stretchy="false">)</mo><mi>X</mi><mo>=</mo><msup><mi>A</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo stretchy="false">(</mo><mi>B</mi><mo stretchy="false">)</mo><mtext>  </mtext><mo>⟹</mo><mtext>  </mtext><mi>I</mi><mi>X</mi><mo>=</mo><msup><mi>A</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo stretchy="false">(</mo><mi>B</mi><mo stretchy="false">)</mo><mtext>  </mtext><mo>⟹</mo><mtext>  </mtext><mi>X</mi><mo>=</mo><msup><mi>A</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo stretchy="false">(</mo><mi>B</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">AX = B \implies A^{-1}(AX) = A^{-1}(B) \implies (A^{-1}A)X = A^{-1}(B) \implies IX = A^{-1}(B) \implies X = A^{-1}(B)
+</annotation></semantics></math>
+
+<ul>
+<li>The inverse of a matrix can be used to <strong>find the inverse of a linear transformation</strong>. A linear transformation is a function that maps vectors to vectors and preserves addition and scalar multiplication.</li>
+</ul>
+<h2 id="eigen-vectors-eigen-values-in-terms-of-linear-transformation">Eigen Vectors &amp; Eigen Values in terms of Linear Transformation</h2>
+<p><center>
+<img alt="Eigen Vectors &amp; Eigen Values" src="https://www.bing.com/th?id=OSK.HEROh529uDehjnTLRfjCQtRW0G3edXGC5z6gcnwDnZ2zYUY&amp;pid=cdx&amp;w=320&amp;h=189" />
+</center></p>
+<h2 id="linear-transformation">Linear Transformation</h2>
+<h3 id="what-is-the-meaning-of-rn-in-coordinate-system">What is the meaning of <span class="arithmatex">\(R^n\)</span> in coordinate system?</h3>
+<p>The mean of coordinate system for <span class="arithmatex">\(R^n\)</span> is the way of locating points or vectors in an n-dimensional space using n numbers. For example, a coordinate system for <span class="arithmatex">\(R^2\)</span> is a way of locating points or vectors in a plane using two numbers, usually called x and y.</p>
+<p>There are different types of coordinate systems for <span class="arithmatex">\(R^n\)</span>, such as Cartesian, polar, cylindrical, spherical, etc. Each type has its own advantages and disadvantages depending on the context and the problem. The most common type is the Cartesian coordinate system, which uses n perpendicular axes (called x-axis, y-axis, z-axis, etc.) that intersect at a point called the origin. Any point or vector in <span class="arithmatex">\(R^n\)</span> can be represented by an n-tuple of numbers (called coordinates) that indicate how far to move along each axis from the origin.</p>
+<p>For example, in a Cartesian coordinate system for <span class="arithmatex">\(R^2\)</span>, the point (3, 4) means moving 3 units along the x-axis and 4 units along the y-axis from the origin. The vector [2, -1] means moving 2 units along the x-axis and -1 unit along the y-axis from any point.</p>
+<p>A coordinate system for <span class="arithmatex">\(R^n\)</span> also defines a basis for <span class="arithmatex">\(R^n\)</span>, which is a set of n linearly independent vectors that span the space. A basis can be used to write any vector in <span class="arithmatex">\(R^n\)</span> as a linear combination of the basis vectors. For example, in a Cartesian coordinate system for <span class="arithmatex">\(R^2\)</span>, the standard basis is {e1, e2}, where e1 = [1, 0] and e2 = [0, 1]. Any vector [x, y] in <span class="arithmatex">\(R^2\)</span> can be written as xe1 + ye2.</p>
+<p>A coordinate system for <span class="arithmatex">\(R^n\)</span> can also be used to perform operations on points or vectors, such as addition, subtraction, scalar multiplication, dot product, cross product, etc. For example, in a Cartesian coordinate system for <span class="arithmatex">\(R^3\)</span>, the dot product of two vectors [<span class="arithmatex">\(x_1, y_1, z_1\)</span>] and [<span class="arithmatex">\(x_2, y_2, z_2\)</span>] is <span class="arithmatex">\(x_1x_2 + y_1y_2 + z_1z_2\)</span>. The cross product of two vectors [<span class="arithmatex">\(x_1, y_1, z_1\)</span>] and <span class="arithmatex">\([x_2, y_2, z_2]\)</span> is <span class="arithmatex">\([y_1z_2 - z_1y_2, z_1x_2 - x_1z_2, x_1y_2 - y_1x_2]\)</span>.</p>
+<p>A coordinate system for <span class="arithmatex">\(R^n\)</span> can also be used to visualize geometric objects or transformations in <span class="arithmatex">\(R^n\)</span>. For example, in a Cartesian coordinate system for <span class="arithmatex">\(R^3\)</span>, a plane can be represented by an equation of the form ax + by + cz = d. A rotation can be represented by a matrix that multiplies each vector by a certain angle.</p>
+<h3 id="what-is-standard-basis-vectors">What is standard basis vectors?</h3>
+<p>Standard basis vectors are vectors that have one entry equal to 1 and the rest equal to 0. They are used to represent the directions along the axes of a coordinate system. For example, in a two-dimensional space, the standard basis vectors are e1 = (1, 0) and e2 = (0, 1). They point along the x-axis and y-axis respectively. In a three-dimensional space, the standard basis vectors are e1 = (1, 0, 0), e2 = (0, 1, 0), and e3 = (0, 0, 1). They point along the x-axis, y-axis, and z-axis respectively.</p>
+<p>Standard basis vectors are useful because they can be used to write any vector as a linear combination of them. For example, in a two-dimensional space, any vector v = (x, y) can be written as v = xe1 + ye2. This means that the components of v are the coefficients of the standard basis vectors. Similarly, in a three-dimensional space, any vector v = (x, y, z) can be written as v = xe1 + ye2 + z*e3.</p>
+<p>Standard basis vectors are also orthogonal to each other, meaning that their dot product is zero. For example, e1 · e2 = (1, 0) · (0, 1) = 0. This means that they are perpendicular to each other and form right angles. Standard basis vectors are also unit vectors, meaning that their length or norm is one. For example, ||e1|| = √(1^2 + 0^2) = 1. This means that they have the same size and only differ in direction.</p>
+<p>Standard basis vectors are sometimes denoted by i, j, k instead of e1, e2, e3. For example, i = (1, 0), j = (0, 1), k = (0, 0, 1). They are also sometimes written with a hat (^) over them to emphasize that they are unit vectors. For example, ê1 = (1, 0), ê2 = (0, 1), ê3 = (0, 0, 1).</p>
+<h3 id="what-is-domain-and-codomain">What is domain and codomain?</h3>
+<p>Domain and codomain are terms related to functions. A function is a rule that assigns an output to every input. For example, f(x) = x + 2 is a function that adds 2 to any input x.</p>
+<p>The domain of a function is the set of all possible inputs that the function can accept. For example, the domain of f(x) = x + 2 is the set of all real numbers, because we can add 2 to any real number.</p>
+<p>The codomain of a function is the set of all possible outputs that the function can produce. For example, the codomain of f(x) = x + 2 is also the set of all real numbers, because adding 2 to any real number gives another real number.</p>
+<p>The range of a function is the subset of the codomain that actually occurs as outputs when the function is applied to the domain. For example, the range of f(x) = x + 2 is the set of all real numbers greater than 2, because adding 2 to any real number gives a number greater than 2.</p>
+<p>The domain and codomain are part of the definition of a function, and they specify what kind of values the function can work with. The range is determined by how the function behaves on the domain, and it tells us what kind of values the function actually produces.</p>
+<h3 id="what-is-linear-transformation">What is Linear Transformation?</h3>
+<p>A linear transformation is a function that maps vectors to vectors and preserves addition and scalar multiplication. For example, if <span class="arithmatex">\(T\)</span> is a linear transformation, then 
+$$ T(\vec{u} + \vec{v}) = T(\vec{u}) + T(\vec{v}) $$
+and
+$$ T(c\vec{u}) = cT(\vec{u}) $$
+for any vectors <span class="arithmatex">\(\vec{u}\)</span> and <span class="arithmatex">\(\vec{v}\)</span> and any scalar c.</p>
+<p>A matrix is a rectangular array of numbers that can be used to perform a linear transformation by multiplying it with a vector. For example, if <span class="arithmatex">\(A\)</span> is an <span class="arithmatex">\(m \times n\)</span> matrix and <span class="arithmatex">\(\vec{x}\)</span> is an <span class="arithmatex">\(n \times 1\)</span> vector, then <span class="arithmatex">\(A\vec{x}\)</span> is an <span class="arithmatex">\(m \times 1\)</span> vector that is the result of applying the linear transformation determined by A to <span class="arithmatex">\(\vec{x}\)</span>.</p>
+<p>The matrix representation of a linear transformation depends on the choice of basis for the domain and the codomain. A basis is a set of linearly independent vectors that span the vector space. For example, the standard basis for <span class="arithmatex">\(R^n\)</span> is the set of n vectors that have 1 in one entry and 0 in all other entries. Any vector in <span class="arithmatex">\(R^n\)</span> can be written as a linear combination of these basis vectors.</p>
+<p>To find the matrix representation of a linear transformation <span class="arithmatex">\(T: R^n → R^m\)</span> with respect to the standard basis, we need to apply <span class="arithmatex">\(T\)</span> to each basis vector of <span class="arithmatex">\(R^n\)</span> and write the result as a column vector in <span class="arithmatex">\(R^m\)</span>. Then, we arrange these column vectors as the columns of an <span class="arithmatex">\(m \times n\)</span> matrix A. This matrix A satisfies the equation:</p>
+<div class="arithmatex">\[ T(\vec{x}) = A\vec{x} \]</div>
+<p>for any vector <span class="arithmatex">\(\vec{x}\)</span> in <span class="arithmatex">\(R^n\)</span>.</p>
+<h3 id="how-to-visualize-the-linear-transformation">How to visualize the Linear Transformation?</h3>
+<p>To visualize a linear transformation using matrix, we can use the following steps:</p>
+<ul>
+<li>Draw a coordinate system for <span class="arithmatex">\(R^n\)</span> and plot the standard basis vectors e1, e2, …, en as arrows from the origin.</li>
+<li>Draw another coordinate system for <span class="arithmatex">\(R^m\)</span> and plot the columns of A as arrows from the origin. These are the images of the standard basis vectors under <span class="arithmatex">\(T\)</span>.</li>
+<li>To find the image of any vector <span class="arithmatex">\(\vec{x}\)</span> in <span class="arithmatex">\(R^n\)</span> under <span class="arithmatex">\(T\)</span>, write <span class="arithmatex">\(\vec{x}\)</span> as a linear combination of the standard basis vectors: <span class="arithmatex">\(\vec{x} = x1e1 + x2e2 + … + xnen\)</span>. Then, use the distributive property of matrix multiplication to write: <span class="arithmatex">\(T(\vec{x}) = A\vec{x} = Ax1e1 + Ax2e2 + … + Axnen\)</span>. This means that <span class="arithmatex">\(T(\vec{x})\)</span> is also a linear combination of the columns of <span class="arithmatex">\(A: T(\vec{x}) = x1Ae1 + x2Ae2 + … + xnAen\)</span>. Therefore, we can plot <span class="arithmatex">\(T(\vec{x})\)</span> in <span class="arithmatex">\(R^m\)</span> by adding up the scaled columns of A according to the coefficients x1, x2, …, xn.</li>
+<li>To see how <span class="arithmatex">\(T\)</span> affects the shape and orientation of objects in <span class="arithmatex">\(R^n\)</span>, we can plot some points or curves in <span class="arithmatex">\(R^n\)</span> and then apply <span class="arithmatex">\(T\)</span> to them using matrix multiplication. We can then compare how they look before and after the transformation.</li>
+</ul>
+<p>To understand more, you can use a <a href="https://www.geogebra.org/m/YCZa8TAH" target="_blank">website</a>. Turn on 2 check boxs, "Show grid" and "Show point/vector". The left side is the <span class="arithmatex">\(R^2\)</span> and the right side is the <span class="arithmatex">\(R^m\)</span>. Use different matrix <span class="arithmatex">\(A\)</span> and get a satisfying results.</p>
+<h3 id="some-examples-of-linear-transformations">Some examples of linear transformations</h3>
+<p>Here are some examples of linear transformations using matrix and their geometric effects:</p>
+<ul>
+<li><strong>Scaling:</strong> A scaling transformation changes the size of objects by multiplying them by a constant factor. For example, if A = [2 0; 0 3], then <span class="arithmatex">\(T: R^2 → R^2\)</span> defined by <span class="arithmatex">\(T(\vec{x}) = A\vec{x}\)</span> is a scaling transformation that doubles the length of vectors along the x-axis and triples them along the y-axis.</li>
+<li><strong>Rotation:</strong> A rotation transformation rotates objects by a certain angle around a fixed point or axis. For example, if A = [cosθ -sinθ; sinθ cosθ], then <span class="arithmatex">\(T: R^2 → R^2\)</span> defined by <span class="arithmatex">\(T(\vec{x}) = A\vec{x}\)</span> is a rotation transformation that rotates vectors counterclockwise by an angle <span class="arithmatex">\(θ\)</span> around the origin.</li>
+<li><strong>Reflection:</strong> A reflection transformation flips objects over a line or plane. For example, if A = [-1 0; 0 1], then <span class="arithmatex">\(T: R^2 → R^2\)</span> defined by <span class="arithmatex">\(T(\vec{x}) = A\vec{x}\)</span> is a reflection transformation that reflects vectors over the y-axis.</li>
+<li><strong>Shear:</strong> A shear transformation slants objects by a certain amount along a direction. For example, if A = [1 k; 0 1], then <span class="arithmatex">\(T: R^2 → R^2\)</span> defined by <span class="arithmatex">\(T(\vec{x}) = A\vec{x}\)</span> is a shear transformation that shifts vectors by k times their y-coordinate along the x-axis.</li>
+</ul>
+<p>These are some of the basic linear transformations using matrix. There are many more that can be obtained by combining or modifying these transformations. For example, a projection transformation maps objects onto a line or plane by discarding some information. A dilation transformation changes the size of objects by multiplying them by different factors along different directions. A squeeze transformation reduces the dimension of objects by mapping them onto a lower-dimensional subspace.</p>
+<h2 id="eigen-vectors-eigen-values-in-linear-transformation">Eigen Vectors &amp; Eigen Values in Linear Transformation</h2>
+<p>An eigenvalue of a linear transformation is a scalar <span class="arithmatex">\(λ\)</span> such that there exists a nonzero vector <span class="arithmatex">\(v\)</span> that satisfies the equation</p>
+<div class="arithmatex">\[T(v) = λv\]</div>
+<p>An eigenvector of a linear transformation is a nonzero vector <span class="arithmatex">\(v\)</span> that satisfies the above equation for some eigenvalue <span class="arithmatex">\(λ\)</span>. In other words, <strong>an eigenvector is a vector that does not change direction when the transformation is applied to it, but only changes its length by a factor of λ.</strong> If you go the <a href="https://www.geogebra.org/m/YCZa8TAH" target="_blank">website</a> and if you apply matrix A = [3 1; 0 2], the vector [1, 0] of the left side will be changed to the [3, 0] of the right side coordinate system. So, the eigen vector is [3, 0] and the eigen value is 3 because it makes 3 times to the [1, 0] vector.</p>
+<p><center>
+<img alt="Eigen Vectors and Eigen Values" src="../../assets/Statistics/eigen-vectors-values.png" />
+</center></p>
+<p>You will gen another Eigen Vector and Eigen value if your use a vector [-1, 1] to the left side coordinatew. <strong>In a 2D coordinate system, there should be 2 eigen vectors and eigen values</strong>.</p>
+<p><center>
+<img alt="Eigen Vectors and Eigen Values" src="../../assets/Statistics/eigen-vectors-values2.png" />
+</center></p>
+<p>The prefix eigen- comes from the German word for “own” or “characteristic”. An eigenvalue and an eigenvector describe an intrinsic or characteristic property of a linear transformation.</p>
+<h3 id="how-to-find-eigen-vectors-and-eigen-values">How to find Eigen Vectors and Eigen Values?</h3>
+<p>To find the eigenvalues and eigenvectors of a linear transformation <span class="arithmatex">\(T: R^n → R^n\)</span> with respect to the standard basis, we need to find the eigenvalues and eigenvectors of its matrix representation A. This can be done by solving the equation</p>
+<div class="arithmatex">\[ A\vec{x} = \lambda{\vec{x}} \]</div>
+<p>for any nonzero vector <span class="arithmatex">\(\vec{x}\)</span> in <span class="arithmatex">\(R^n\)</span> and any scalar λ. You can write the above equation like</p>
+<div class="arithmatex">\[ A.\vec{x} = \lambda.I.\vec{x} \Rightarrow (A-\lambda I).\vec{x} = 0 \]</div>
+<p>where, A is a <span class="arithmatex">\(m \times n\)</span> matrix, <span class="arithmatex">\(\vec{x}\)</span> is a <span class="arithmatex">\(n \times 1\)</span> vector and I is a <span class="arithmatex">\(n \times n\)</span> identity matrix.</p>
+<p>This equation has a nontrivial solution <span class="arithmatex">\((\vec{x} \neq 0)\)</span> if and only if the matrix <span class="arithmatex">\(A - λI\)</span> is singular (not invertible). This means that its <strong>determinant must be zero</strong>. Therefore, we can find the eigenvalues by solving the equation:</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="normal">∣</mi><mi>A</mi><mo>−</mo><mi>λ</mi><mi>I</mi><mi mathvariant="normal">∣</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">|A - \lambda I| = 0
+</annotation></semantics></math>
+
+<p>This equation is called the characteristic equation of <span class="arithmatex">\(A\)</span>. It is a polynomial equation of degree <span class="arithmatex">\(n\)</span> in <span class="arithmatex">\(λ\)</span>. The roots of this equation are the eigenvalues of <span class="arithmatex">\(A\)</span> (and <span class="arithmatex">\(T\)</span>). To find the eigenvectors corresponding to each eigenvalue, we need to plug in each eigenvalue into the equation</p>
+<div class="arithmatex">\[ (A - \lambda I)\vec{x} = 0 \]</div>
+<p>and find all nonzero solutions for <span class="arithmatex">\(\vec{x}\)</span>. This can be done by using methods such as Gaussian elimination or Cramer’s rule.</p>
+<p>The set of all eigenvectors corresponding to an eigenvalue <span class="arithmatex">\(λ\)</span>, together with the zero vector, forms a subspace of <span class="arithmatex">\(R^n\)</span> called the <strong>eigenspace of <span class="arithmatex">\(λ\)</span></strong>. The dimension of this subspace is called the geometric multiplicity of λ.</p>
+<h3 id="hands-on-calculation-to-find-eigen-vectors-and-eigen-values">Hands on calculation to find Eigen Vectors and Eigen Values</h3>
+<p>Let us consider an example of finding the eigenvalues and eigenvectors of a 2 x 2 matrix that represents a 2D coordinate system transformation. Suppose we have the matrix:</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>A</mi><mo>=</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>3</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>2</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>4</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>1</mn></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">A = \begin{bmatrix} 3 &amp; -2 \\ 4 &amp; -1 \end{bmatrix}
+</annotation></semantics></math>
+
+<p>To find the eigenvalues of A, we need to solve the characteristic equation</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="normal">∣</mi><mi>A</mi><mo>−</mo><mi>λ</mi><mi>I</mi><mi mathvariant="normal">∣</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">|A - \lambda I| = 0
+</annotation></semantics></math>
+
+<p>Expanding this equation, we get:</p>
+<div class="arithmatex">\[ \begin{vmatrix}
+3-\lambda &amp; -2\\
+4 &amp; -1-\lambda
+\end{vmatrix} = 0 \]</div>
+<div class="arithmatex">\[ (3-\lambda)(-1-\lambda)+8 = 0 \]</div>
+<div class="arithmatex">\[ \lambda^2 - 2\lambda + 5 = 0 \]</div>
+<p>Using the quadratic formula, we get two solutions for <span class="arithmatex">\(\lambda\)</span></p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>λ</mi><mn>1</mn></msub><mo>=</mo><mn>1</mn><mo>+</mo><mn>2</mn><mi>i</mi></mrow><annotation encoding="application/x-tex">\lambda_1 = 1 + 2i
+</annotation></semantics></math>
+
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>λ</mi><mn>2</mn></msub><mo>=</mo><mn>1</mn><mo>−</mo><mn>2</mn><mi>i</mi></mrow><annotation encoding="application/x-tex">\lambda_2 = 1 - 2i
+</annotation></semantics></math>
+
+<p>These are the eigenvalues of <span class="arithmatex">\(A\)</span>. Note that they are complex numbers, which means that A does not have any real eigenvectors.</p>
+<p>To find the eigenvectors corresponding to each eigenvalue, we need to plug in each eigenvalue into the equation:</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">(</mo><mi>A</mi><mo>−</mo><mi>λ</mi><mi>I</mi><mo stretchy="false">)</mo><mi>v</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">(A - \lambda I)v = 0
+</annotation></semantics></math>
+
+<p>and find all nonzero solutions for <span class="arithmatex">\(v\)</span>.</p>
+<p>For <span class="arithmatex">\(λ_1 = 1 + 2i\)</span>, we get</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>3</mn><mo>−</mo><mo stretchy="false">(</mo><mn>1</mn><mo>+</mo><mn>2</mn><mi>i</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>2</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>4</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>1</mn><mo>−</mo><mo stretchy="false">(</mo><mn>1</mn><mo>+</mo><mn>2</mn><mi>i</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mi>v</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\begin{bmatrix} 3 - (1 + 2i) &amp; -2 \\ 4 &amp; -1 - (1 + 2i) \end{bmatrix}v = 0
+</annotation></semantics></math>
+
+<p>Simplifying this equation, we get</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>2</mn><mo>−</mo><mn>2</mn><mi>i</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>2</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>4</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>2</mn><mo>−</mo><mn>2</mn><mi>i</mi></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mi>v</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\begin{bmatrix} 2 - 2i &amp; -2 \\ 4 &amp; -2 - 2i \end{bmatrix}v = 0
+</annotation></semantics></math>
+
+<p>Using Gaussian elimination, we can reduce this matrix to row echelon form</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>1</mn><mo>−</mo><mi>i</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>1</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0</mn></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mi>v</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\begin{bmatrix} 1 - i &amp; -1 \\ 0 &amp; 0 \end{bmatrix}v = 0
+</annotation></semantics></math>
+
+<p>From this matrix, we can see that the first component of v must satisfy</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>i</mi><mo stretchy="false">)</mo><msub><mi>v</mi><mn>1</mn></msub><mo>−</mo><msub><mi>v</mi><mn>2</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">(1 - i)v_1 - v_2 = 0
+</annotation></semantics></math>
+
+<p>We can choose any nonzero value for <span class="arithmatex">\(v_2\)</span> and solve for <span class="arithmatex">\(v_1\)</span>. For example, if we choose <span class="arithmatex">\(v_2 = 1\)</span>, we get</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>v</mi><mn>1</mn></msub><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>−</mo><mi>i</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><mn>1</mn><mo>+</mo><mi>i</mi></mrow><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">v_1 = \frac{1}{1 - i} = \frac{1 + i}{2}
+</annotation></semantics></math>
+
+<p>Therefore, one possible eigenvector corresponding to <span class="arithmatex">\(\lambda_1\)</span> is</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>v</mi><mn>1</mn></msub><mo>=</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mfrac><mrow><mn>1</mn><mo>+</mo><mi>i</mi></mrow><mn>2</mn></mfrac></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">v_1 = \begin{bmatrix} \frac{1 + i}{2} \\ 1 \end{bmatrix}
+</annotation></semantics></math>
+
+<p>We can check that this vector satisfies the equation <span class="arithmatex">\(Av_1 = \lambda{_1}v_1\)</span></p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>3</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>2</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>4</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>1</mn></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mfrac><mrow><mn>1</mn><mo>+</mo><mi>i</mi></mrow><mn>2</mn></mfrac></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mo>=</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mfrac><mrow><mn>3</mn><mo>+</mo><mn>3</mn><mi>i</mi></mrow><mn>2</mn></mfrac></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>2</mn><mo>+</mo><mn>2</mn><mi>i</mi></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mo>=</mo><mo stretchy="false">(</mo><mn>1</mn><mo>+</mo><mn>2</mn><mi>i</mi><mo stretchy="false">)</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mfrac><mrow><mn>1</mn><mo>+</mo><mi>i</mi></mrow><mn>2</mn></mfrac></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\begin{bmatrix} 3 &amp; -2 \\ 4 &amp; -1 \end{bmatrix}\begin{bmatrix} \frac{1 + i}{2} \\ 1 \end{bmatrix} = \begin{bmatrix} \frac{3 + 3i}{2} \\ 2 + 2i \end{bmatrix} = (1 + 2i)\begin{bmatrix} \frac{1 + i}{2} \\ 1 \end{bmatrix}
+</annotation></semantics></math>
+
+<p>For <span class="arithmatex">\(\lambda_2 = 1 - 2i\)</span>, we get</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>3</mn><mo>−</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mn>2</mn><mi>i</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>2</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>4</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>1</mn><mo>−</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mn>2</mn><mi>i</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mi>v</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\begin{bmatrix} 3 - (1 - 2i) &amp; -2 \\ 4 &amp; -1 - (1 - 2i) \end{bmatrix}v = 0
+</annotation></semantics></math>
+
+<p>Simplifying this equation, we get</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>2</mn><mo>+</mo><mn>2</mn><mi>i</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>2</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>4</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>2</mn><mo>+</mo><mn>2</mn><mi>i</mi></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mi>v</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\begin{bmatrix} 2 + 2i &amp; -2 \\ 4 &amp; -2 + 2i \end{bmatrix}v = 0
+</annotation></semantics></math>
+
+<p>Using Gaussian elimination, we can reduce this matrix to row echelon form</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>1</mn><mo>+</mo><mi>i</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>1</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>0</mn></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mi>v</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\begin{bmatrix} 1 + i &amp; -1 \\ 0 &amp; 0 \end{bmatrix}v = 0
+</annotation></semantics></math>
+
+<p>From this matrix, we can see that the first component of v must satisfy</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo stretchy="false">(</mo><mn>1</mn><mo>+</mo><mi>i</mi><mo stretchy="false">)</mo><msub><mi>v</mi><mn>1</mn></msub><mo>−</mo><msub><mi>v</mi><mn>2</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">(1 + i)v_1 - v_2 = 0
+</annotation></semantics></math>
+
+<p>We can choose any nonzero value for <span class="arithmatex">\(v_2\)</span> and solve for <span class="arithmatex">\(v_1\)</span>. For example, if we choose <span class="arithmatex">\(v_2 = 1\)</span>, we get</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>v</mi><mn>1</mn></msub><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><mi>i</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mi>i</mi></mrow><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">v_1 = \frac{1}{1 + i} = \frac{1 - i}{2}
+</annotation></semantics></math>
+
+<p>Therefore, one possible eigenvector corresponding to <span class="arithmatex">\(\lambda_2\)</span> is</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>v</mi><mn>2</mn></msub><mo>=</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mfrac><mrow><mn>1</mn><mo>−</mo><mi>i</mi></mrow><mn>2</mn></mfrac></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">v_2 = \begin{bmatrix} \frac{1 - i}{2} \\ 1 \end{bmatrix}
+</annotation></semantics></math>
+
+<p>We can check that this vector satisfies the equation <span class="arithmatex">\(Av_2 = \lambda_{2}v_2\)</span></p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>3</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>2</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>4</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>1</mn></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mfrac><mrow><mn>1</mn><mo>−</mo><mi>i</mi></mrow><mn>2</mn></mfrac></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mo>=</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mfrac><mrow><mn>3</mn><mo>−</mo><mn>3</mn><mi>i</mi></mrow><mn>2</mn></mfrac></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>2</mn><mo>−</mo><mn>2</mn><mi>i</mi></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow><mo>=</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mn>2</mn><mi>i</mi><mo stretchy="false">)</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mfrac><mrow><mn>1</mn><mo>−</mo><mi>i</mi></mrow><mn>2</mn></mfrac></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\begin{bmatrix} 3 &amp; -2 \\ 4 &amp; -1 \end{bmatrix}\begin{bmatrix} \frac{1 - i}{2} \\ 1 \end{bmatrix} = \begin{bmatrix} \frac{3 - 3i}{2} \\ 2 - 2i \end{bmatrix} = (1 - 2i)\begin{bmatrix} \frac{1 - i}{2} \\ 1 \end{bmatrix}
+</annotation></semantics></math>
+
+<h3 id="properties-of-eigen-vectors-and-eigen-values">Properties of Eigen Vectors and Eigen Values</h3>
+<ul>
+<li>
+<p><strong>Sum of Eigen values:</strong> The sum of all the eigen values of a matrix is equal to its trace (the sum of the diagonal elements of the matrix). This holds true regardless of whether the matrix is square or not.</p>
+</li>
+<li>
+<p><strong>Product of Eigen values:</strong> The product of all the eugen values of a matrix is equal to its determinant. This holds true for square matrix.</p>
+</li>
+<li>
+<p><strong>Eigen vectors corresponsing to different eigen values are orthogonal:</strong> If a matrix <span class="arithmatex">\(A\)</span> is symmetric (i.e., <span class="arithmatex">\(A=A6T\)</span>), the eigen vectors corresponding to distinct eigen values are orthogonal to each other.</p>
+</li>
+<li>
+<p><strong>Eigen value of an Identity matrix:</strong> For an Identity matrix, the eigen values are all 1, regardless of the dimension of the matrix.</p>
+</li>
+<li>
+<p><strong>Eigen value of a scalar multiple:</strong> If <span class="arithmatex">\(B\)</span> is a matrix obtained by multiplying a scalar <span class="arithmatex">\(c\)</span> to a matrix <span class="arithmatex">\(A\)</span> (i.e., <span class="arithmatex">\(B = cA\)</span>), then the eigen values of <span class="arithmatex">\(B\)</span> are just the eigen values of <span class="arithmatex">\(A\)</span> each multiplied by <span class="arithmatex">\(c\)</span>.</p>
+</li>
+<li>
+<p><strong>Eigen values of a Diagonal Matrix:</strong> For a diagonal matrix, the eigen values are the diagonal elements themselves.</p>
+</li>
+<li>
+<p><strong>Eigen values of a Transposed Matrix:</strong> The eigen values of a matrix and it's transpose are the same.</p>
+</li>
+</ul>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy"], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.b4d07000.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
