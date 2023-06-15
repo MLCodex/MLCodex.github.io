@@ -1,0 +1,725 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../different-distance-calculations/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.14">
+    
+    
+      
+        <title>Cross Validation - MLCodex</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.85bb2934.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a6bdf11c.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#understanding-cross-validation-a-key-concept-in-machine-learning" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="MLCodex" class="md-header__button md-logo" aria-label="MLCodex" data-md-component="logo">
+      
+  <img src="../../assets/logo/logo-6.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MLCodex
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Cross Validation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="MLCodex" class="md-nav__button md-logo" aria-label="MLCodex" data-md-component="logo">
+      
+  <img src="../../assets/logo/logo-6.png" alt="logo">
+
+    </a>
+    MLCodex
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Statistics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Statistics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Statistics/One-Way-ANOVA/" class="md-nav__link">
+        One Way ANOVA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Statistics/Matrix/" class="md-nav__link">
+        Basic guide of Matrix Algebra
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          Machine Learning
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Machine Learning
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../different-distance-calculations/" class="md-nav__link">
+        Different types of distances
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Cross Validation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Cross Validation
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-cross-validation" class="md-nav__link">
+    What is Cross Validation?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#types-of-cross-validation" class="md-nav__link">
+    Types of Cross Validation
+  </a>
+  
+    <nav class="md-nav" aria-label="Types of Cross Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#k-fold-cross-validation" class="md-nav__link">
+    K-Fold Cross Validation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#leave-one-out-cross-validation-loocv" class="md-nav__link">
+    Leave One Out Cross Validation (LOOCV)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stratified-cross-validation" class="md-nav__link">
+    Stratified Cross Validation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is-it-making-our-task-easier" class="md-nav__link">
+    is it making our task easier?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-steps-for-cv" class="md-nav__link">
+    Common steps for CV
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benefits-of-cross-validation" class="md-nav__link">
+    Benefits of Cross Validation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-the-final-model-after-doing-cv-for-prediction" class="md-nav__link">
+    What is the final model after doing CV for prediction?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-cross-validation" class="md-nav__link">
+    What is Cross Validation?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#types-of-cross-validation" class="md-nav__link">
+    Types of Cross Validation
+  </a>
+  
+    <nav class="md-nav" aria-label="Types of Cross Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#k-fold-cross-validation" class="md-nav__link">
+    K-Fold Cross Validation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#leave-one-out-cross-validation-loocv" class="md-nav__link">
+    Leave One Out Cross Validation (LOOCV)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stratified-cross-validation" class="md-nav__link">
+    Stratified Cross Validation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is-it-making-our-task-easier" class="md-nav__link">
+    is it making our task easier?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-steps-for-cv" class="md-nav__link">
+    Common steps for CV
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benefits-of-cross-validation" class="md-nav__link">
+    Benefits of Cross Validation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-the-final-model-after-doing-cv-for-prediction" class="md-nav__link">
+    What is the final model after doing CV for prediction?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<p><center></p>
+<h1 id="understanding-cross-validation-a-key-concept-in-machine-learning"><strong>Understanding Cross-Validation: A Key Concept in Machine Learning</strong></h1>
+<p></center></p>
+<p>In today's world of data-driven decision-making, machine learning has emerged as a powerful tool for solving complex problems. One crucial technique in the toolkit of any machine learning practitioner is cross-validation. This blog post aims to provide a comprehensive introduction to cross-validation, including its types, the steps involved, and its benefits.</p>
+<h2 id="what-is-cross-validation">What is Cross Validation?</h2>
+<p>In the realm of machine learning, the primary goal is to build models that perform well not just on the training data they've seen, but on unseen data as well. To evaluate this generalizability, we need a reliable method. This is where cross-validation comes into play.</p>
+<p>Cross-validation is a statistical method used to estimate the performance of machine learning models. It helps us understand how the results of a statistical analysis will generalize to an independent dataset. It is primarily used in settings where the goal is prediction and one wants to estimate how accurately a predictive model will perform in practice.</p>
+<p>It involves dividing the available data into multiple non-overlapping folds or subsets, using one of these folds as a validation set, and training the model on the remaining folds. This process is repeated multiple times, each time using a different fold as the validation set. Finally, the results from each validation step are averaged to produce a more robust estimate of the model’s performance.</p>
+<p>The main purpose of cross validation is to prevent overfitting, which occurs when a model is trained too well on the training data and performs poorly on new, unseen data. By evaluating the model on multiple validation sets, cross validation provides a more realistic estimate of the model’s generalization performance, i.e., its ability to perform well on new, unseen data.</p>
+<h2 id="types-of-cross-validation">Types of Cross Validation</h2>
+<p>Several forms of cross-validation are used in the field of machine learning, each with its own benefits and drawbacks. Some of the most common types include:</p>
+<h3 id="k-fold-cross-validation">K-Fold Cross Validation</h3>
+<p>K-fold cross validation is one of the most common and widely used cross validation techniques. It involves splitting the data into k equal-sized subsets or folds. One of these folds is used as the validation set, and the model is trained on the remaining k-1 folds. This process is repeated k times, each time using a different fold as the validation set. The performance of the model is then calculated by averaging the scores obtained on each validation set.</p>
+<p><img alt="K-Fold Cross Validation" src="https://scikit-learn.org/stable/_images/grid_search_cross_validation.png" /></p>
+<p>If you look to the above image, you have devided your whole dataset into 5 folds. For the first iteration, you pick up the fold-1 to validate the model and the rest folds are used for trainig. Then in for the second iteration, you pick up the fold-2 (you should not to pick the fold-1 as it is already in the previous iteration) as testing dataset and the rest of the folds are used for training. This iterations are done for k times.</p>
+<p>The advantage of k-fold cross validation is that it reduces the variance of the model performance estimate, as it uses all the data for both training and testing. The disadvantage is that it can be computationally expensive, especially for large datasets or complex models.</p>
+<p>The choice of k depends on various factors, such as the size of the data, the complexity of the model, and the desired trade-off between bias and variance. A common value for k is 10, but it can vary depending on the situation. Below is the example to do the Cross Validation by making 10 folds using Scikit Learn library.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_val_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_boston</span>
+
+<span class="c1"># Load Boston housing dataset</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_boston</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Create linear regression model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+
+<span class="c1"># Perform 10-fold cross validation</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Print scores and mean score</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</code></pre></div>
+<h3 id="leave-one-out-cross-validation-loocv">Leave One Out Cross Validation (LOOCV)</h3>
+<p>Leave-one-out cross validation (LOOCV) is a special case of k-fold cross validation where k equals the number of observations in the data. In other words, it involves leaving out one observation from the data as the validation set, and training the model on the remaining n-1 observations. This process is repeated n times, each time using a different observation as the validation set. The performance of the model is then calculated by averaging the scores obtained on each validation set.</p>
+<p><img alt="Leave One Out Cross Validation" src="https://i0.wp.com/neptune.ai/wp-content/uploads/2022/10/Cross-validation-leave-one-out.jpg?resize=564%2C440&amp;ssl=1" /></p>
+<p>The advantage of LOOCV is that it uses all the data for both training and testing, and it does not introduce any randomness in the data splitting. The disadvantage is that it can be very computationally expensive, especially for large datasets or complex models.</p>
+<p><strong>LOOCV is usually recommended when the data is very small or scarce, and every observation is valuable for training and testing.</strong> The following code snippet shows how to perform LOOCV on a linear regression model using scikit-leave:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">LeaveOneOut</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_boston</span>
+
+<span class="c1"># Load Boston housing dataset</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_boston</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Create linear regression model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+
+<span class="c1"># Create leave-one-out splitter</span>
+<span class="n">loo</span> <span class="o">=</span> <span class="n">LeaveOneOut</span><span class="p">()</span>
+
+<span class="c1"># Perform leave-one-out cross validation</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span> <span class="ow">in</span> <span class="n">loo</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">train_index</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span>
+    <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">train_index</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+    <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+
+<span class="c1"># Print scores and mean score</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>
+</code></pre></div>
+<h3 id="stratified-cross-validation">Stratified Cross Validation</h3>
+<p>Stratified cross validation is a variation of k-fold cross validation that preserves the proportion of each class or category in the data. It is useful when the data is imbalanced, i.e., when some classes or categories are overrepresented or underrepresented in the data. In such cases, using regular k-fold cross validation can result in biased or inaccurate estimates of the model performance, as some folds may contain only or mostly examples of one class or category.</p>
+<p><img alt="Stratified Cross Validation" src="https://amueller.github.io/aml/_images/stratified_cv.png" /></p>
+<p>Stratified cross validation ensures that each fold has the same or similar distribution of classes or categories as the original data. This way, the model is trained and tested on more representative samples of the data.</p>
+<p>Stratified cross validation can be applied to both classification and regression problems, depending on whether the target variable is categorical or continuous. For classification problems, stratified k-fold cross validation can be performed using scikit-learn’s <code>StratifiedKFold</code> class. For regression problems, stratified k-fold cross validation can be performed using scikit-learn’s <code>StratifiedShuffleSplit</code> class.</p>
+<p>The following code snippet shows how to perform stratified 10-fold cross validation on a logistic regression model using scikit-learn:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">StratifiedKFold</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_breast_cancer</span>
+
+<span class="c1"># Load breast cancer dataset</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_breast_cancer</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Create logistic regression model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+
+<span class="c1"># Create stratified 10-fold splitter</span>
+<span class="n">skf</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Perform stratified 10-fold cross validation</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span> <span class="ow">in</span> <span class="n">skf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">train_index</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span>
+    <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">train_index</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+    <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+
+<span class="c1"># Print scores and mean score</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>
+</code></pre></div>
+<h2 id="is-it-making-our-task-easier">is it making our task easier?</h2>
+<h2 id="common-steps-for-cv">Common steps for CV</h2>
+<ol>
+<li><strong>Data splitting:</strong> Divide the entire dataset into k equal, non-overlapping subsets or "folds". If the dataset has n samples, each fold should contain roughly n/k samples.</li>
+<li><strong>Model training:</strong> For each unique group, take the group as a test data set and take the remaining groups as a training data set. Fit a model on the training set and evaluate it on the test set.</li>
+<li><strong>Model evaluation:</strong> Retain the evaluation score and discard the model. Scores may include accuracy, F1-score, precision, recall, or others depending on the task at hand.</li>
+<li><strong>Results aggregation:</strong> The result of cross-validation is often given as the mean of the model skill scores, and also the variance or standard deviation of the scores which can give an idea about the model's stability. For example, a low standard deviation suggests the model is stable, and a high standard deviation suggests the model's performance is sensitive to the specific folds used for training and validation.</li>
+<li><strong>Model selection:</strong> If you're comparing different models, choose the one with the highest mean score (and, ideally, the lowest variance).</li>
+<li><strong>Final model training:</strong> Once the model type and hyperparameters have been selected, use all the data to train the final model.</li>
+</ol>
+<h2 id="benefits-of-cross-validation">Benefits of Cross Validation</h2>
+<p>The beauty of cross-validation lies in its simplicity and effectiveness. Here are some reasons why cross-validation is widely used:</p>
+<ol>
+<li><strong>Model performance:</strong> It provides a robust estimate of the model's performance on unseen data. By using different subsets for training and validation in each iteration, we essentially use all our data for both training and validation, just not at the same time.</li>
+<li><strong>Bias Variance trade-off:</strong> It strikes a good balance between bias and variance. With k-fold cross-validation, we aren't using too small a part of our data for validation (which might lead to a high bias), and also not too large a part (which might lead to high variance).</li>
+<li><strong>Overfitting prevention:</strong> It helps in identifying models that overfit the training data. Overfitting is when a model performs very well on training data but poorly on unseen data. Since cross-validation involves testing the model's performance on unseen data, overfit models tend to stand out due to their poor validation performance.</li>
+<li><strong>Hyperparameter tuning:</strong> It helps in tuning the hyperparameters of the model. By using cross-validation, we can search for the best hyperparameters that give the best performance on the validation set.</li>
+<li><strong>Model selection:</strong> Cross-validation can help in selecting the model which would perform the best on unseen data. By comparing the validation scores of different models, we can select the one that performs the best.</li>
+</ol>
+<h2 id="what-is-the-final-model-after-doing-cv-for-prediction">What is the final model after doing CV for prediction?</h2>
+<p>A common source of confusion in cross-validation is about the final model that should be used for predictions on new, unseen data. It's important to remember that the purpose of cross-validation is not to create the final model, but to assess how the model's results will generalize to an independent data set, and to tune any hyperparameters.</p>
+<p>When you're performing k-fold cross-validation, you are indeed training k different models on k different subsets of the data. But the objective is to average the performance of these models, not to pick one of them for your final model.</p>
+<p>After you have evaluated the cross-validation score and tuned hyperparameters, you usually train your model again with these optimal hyperparameters, but now using the entire dataset. This final model, trained on all available data, is the one you use for future predictions.</p>
+<p>This approach makes intuitive sense because you're using the most information (i.e., the entire dataset) to train your final model. The cross-validation process only provides guidance on how to make that final model as good as possible. It tells you how well your model should perform on unseen data and which hyperparameters should give you the best performance.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>In summary, cross-validation is a valuable tool in a machine learning practitioner's arsenal. It's simple yet effective, providing a robust estimate of a model's real-world performance. Moreover, it helps in avoiding overfitting, tuning hyperparameters, and model selection. Despite its computational cost, the value it provides in building reliable and robust machine learning models is undeniable. Whether you're a seasoned practitioner or just starting out in the field of machine learning, understanding and effectively using cross-validation is an essential skill to have.</p>
+<p>The journey doesn't stop here though! Stay tuned to learn more about other techniques to fine-tune your machine learning models and to ensure they're ready to tackle real-world challenges.</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy"], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.b4d07000.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
